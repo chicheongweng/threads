@@ -4,5 +4,5 @@ threads
 # build
 ./gradlew clean; ./gradlew build
 
-#run
+# run
 ./gradlew run
