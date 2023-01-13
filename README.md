@@ -1,7 +1,7 @@
 # threads depedency
 B, C independently depend on A
 
-D depend on B & C
+D depends on B & C
 
 # build
 ./gradlew clean; ./gradlew build
@@ -14,13 +14,21 @@ D depend on B & C
 
 
 > Task :run
+
 Thread A starting ...
+
 Thread A exiting ...
+
 Thread B starting ...
+
 Thread C starting ...
+
 Thread B exiting ...
+
 Thread C exiting ...
+
 Thread D starting ...
+
 Thread D exiting ...
 
 Deprecated Gradle features were used in this build, making it incompatible with Gradle 8.0.
