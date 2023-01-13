@@ -10,11 +10,8 @@ B, C independently depend on A
 
 D depends on B & C
 
-# build
-./gradlew clean; ./gradlew build
-
-# run
-./gradlew run
+# build and run
+./gradlew clean; ./gradlew build; ./gradlew run
 
 # sample output
 ~/workspace/threads(main)>./gradlew run
