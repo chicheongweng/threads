@@ -1,5 +1,14 @@
 plugins {
+    id 'application'
     id 'java'
+}
+apply plugin: "java"
+ext {
+    javaMainClass = "org.example.Main"
+}
+
+application {
+    mainClassName = javaMainClass
 }
 
 group 'org.example'
