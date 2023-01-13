@@ -1,126 +1,43 @@
 package org.example;
 
 // Dependency
-// B, C depend on A
+// B, C independently depend on A
 // D depend on B & C
-class ThreadA extends Thread {
-
-    Thread tb;
-    Thread tc;
-    public ThreadA(Thread tb, Thread tc) {
-        this.tb = tb;
-        this.tc = tc;
-    }
-    public void run() {
-        System.out.println("Thread A starting ...");
-        try {
-            sleep(5000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("Thread A exiting ...");
-        synchronized (tb) {
-            tb.notify();
-        }
-        synchronized (tc) {
-            tc.notify();
-        }
-    }
-}
-
-class ThreadB extends Thread {
-
-    public void run() {
-        synchronized (this) {
-            try {
-                this.wait();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        System.out.println("Thread B starting ...");
-        try {
-            sleep(500);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("Thread B exiting ...");
-        synchronized (this) {
-            notify();;
-        }
-    }
-}
-
-class ThreadC extends Thread {
-
-    public void run() {
-        synchronized (this) {
-            try {
-                this.wait();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        System.out.println("Thread C starting ...");
-        try {
-            sleep(500);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("Thread C exiting ...");
-        synchronized (this) {
-            notify();;
-        }
-    }
-}
-
-class ThreadD extends Thread {
-    Thread tb;
-    Thread tc;
-
-    public ThreadD (Thread tb, Thread tc) {
-        this.tb = tb;
-        this.tc = tc;
+class MyThread extends Thread {
+    Thread[] threads;
+    public MyThread(String name, Thread... threads ) {
+        this.setName(name);
+        this.threads = threads;
     }
 
     public void run() {
-        synchronized (tb) {
-            try {
-                tb.join();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+        if (threads!=null) {
+            for (Thread t:threads) {
+                try {
+                    t.join();
+                    System.out.println(this.getName()+" joining "+t.getName());
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
-        synchronized (tc) {
-            try {
-                tc.join();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        System.out.println("Thread D starting ...");
-        try {
-            sleep(1);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("Thread D exiting ...");
+        System.out.println(this.getName()+" starting ...");
+        System.out.println(this.getName()+" exiting ...");
     }
 }
+
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {
 
-        ThreadB tb = new ThreadB();
-        ThreadC tc = new ThreadC();
-        ThreadA ta = new ThreadA(tb, tc);
-        ThreadD td = new ThreadD(tb, tc);
+        MyThread ta = new MyThread("A", (Thread[])null);
+        MyThread tb = new MyThread("B", ta);
+        MyThread tc = new MyThread("C", ta);
+        MyThread td = new MyThread("D", tb, tc);
 
+        td.start();
         tb.start();
         tc.start();
         ta.start();
-        td.start();
-
-
     }
 }
