@@ -1,5 +1,7 @@
 package org.example;
 
+import static java.lang.Thread.sleep;
+
 // Dependency
 // B, C independently depend on A
 // D depend on B & C
@@ -35,9 +37,10 @@ public class Main {
         MyThread tc = new MyThread("C", ta);
         MyThread td = new MyThread("D", tb, tc);
 
-        td.start();
+        ta.start();
         tb.start();
         tc.start();
-        ta.start();
+        td.start();
+
     }
 }
